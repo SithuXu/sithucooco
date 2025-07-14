@@ -9,18 +9,22 @@ jobs:
     steps:
       - name: Set RDP password
         run: net user runneradmin MyRDPpassword123
+
       - name: Enable RDP
         run: |
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         shell: powershell
+
       - name: Download and setup ngrok
         run: |
           Invoke-WebRequest -Uri https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip
           .\ngrok\ngrok.exe authtoken 2zsaYgruITTu8XPPrAKJmuprBfS_6CHwHyN16RsygiknG8P8N
-          Start-Process .\ngrok\ngrok.exe 'tcp 3389'
+          Start-Job -ScriptBlock { Start-Process -NoNewWindow -FilePath "$PWD\ngrok\ngrok.exe" -ArgumentList "tcp 3389" }
+          Start-Sleep -Seconds 10
         shell: powershell
+
       - name: Show ngrok tunnel info
         run: |
           curl http://127.0.0.1:4040/api/tunnels
