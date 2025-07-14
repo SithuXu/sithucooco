@@ -18,10 +18,10 @@ jobs:
 
       - name: Download and setup ngrok, start tunnel, show address
         run: |
-          Invoke-WebRequest -Uri https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+          Invoke-WebRequest -Uri https://github.com/ngrok/ngrok/releases/download/v3.13.3/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip
-          .\ngrok\ngrok.exe authtoken 2zsaYgruITTu8XPPrAKJmuprBfS_6CHwHyN16RsygiknG8P8N
-          Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow
-          Start-Sleep -Seconds 30
+          .\ngrok.exe authtoken 2zsaYgruITTu8XPPrAKJmuprBfS_6CHwHyN16RsygiknG8P8N
+          Start-Process -FilePath .\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow
+          Start-Sleep -Seconds 20
           curl http://127.0.0.1:4040/api/tunnels
         shell: powershell
