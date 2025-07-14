@@ -16,16 +16,12 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         shell: powershell
 
-      - name: Download and setup ngrok
+      - name: Download and setup ngrok, start tunnel, show address
         run: |
           Invoke-WebRequest -Uri https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip
           .\ngrok\ngrok.exe authtoken 2zsaYgruITTu8XPPrAKJmuprBfS_6CHwHyN16RsygiknG8P8N
-          Start-Job -ScriptBlock { Start-Process -NoNewWindow -FilePath "$PWD\ngrok\ngrok.exe" -ArgumentList "tcp 3389" }
-          Start-Sleep -Seconds 10
-        shell: powershell
-
-      - name: Show ngrok tunnel info
-        run: |
+          Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow
+          Start-Sleep -Seconds 30
           curl http://127.0.0.1:4040/api/tunnels
-        shell: bash
+        shell: powershell
