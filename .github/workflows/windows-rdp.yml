@@ -21,3 +21,7 @@ jobs:
           .\ngrok\ngrok.exe authtoken 2zsaYgruITTu8XPPrAKJmuprBfS_6CHwHyN16RsygiknG8P8N
           Start-Process .\ngrok\ngrok.exe 'tcp 3389'
         shell: powershell
+      - name: Show ngrok tunnel info
+        run: |
+          curl http://127.0.0.1:4040/api/tunnels
+        shell: bash
